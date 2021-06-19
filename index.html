@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1585px;
+            height: 791px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/land_0.js"></script>
+        <script src="data/ocean_1.js"></script>
+        <script src="data/CNTR_BN_01M_2020_3035_2.js"></script>
+        <script src="data/levelsofrestrictions_3.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[30.933339337199165,-15.428521347289752],[63.13611547510687,49.18110428808148]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        function pop_land_0(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['featurecla'] !== null ? autolinker.link(feature.properties['featurecla'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['scalerank'] !== null ? autolinker.link(feature.properties['scalerank'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['min_zoom'] !== null ? autolinker.link(feature.properties['min_zoom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_land_0_0() {
+            return {
+                pane: 'pane_land_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(133,182,111,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_land_0');
+        map.getPane('pane_land_0').style.zIndex = 400;
+        map.getPane('pane_land_0').style['mix-blend-mode'] = 'normal';
+        var layer_land_0 = new L.geoJson(json_land_0, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_land_0',
+            layerName: 'layer_land_0',
+            pane: 'pane_land_0',
+            onEachFeature: pop_land_0,
+            style: style_land_0_0,
+        });
+        bounds_group.addLayer(layer_land_0);
+        map.addLayer(layer_land_0);
+        function pop_ocean_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['featurecla'] !== null ? autolinker.link(feature.properties['featurecla'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['scalerank'] !== null ? autolinker.link(feature.properties['scalerank'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['min_zoom'] !== null ? autolinker.link(feature.properties['min_zoom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ocean_1_0() {
+            return {
+                pane: 'pane_ocean_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(85,134,164,1.0)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_ocean_1');
+        map.getPane('pane_ocean_1').style.zIndex = 401;
+        map.getPane('pane_ocean_1').style['mix-blend-mode'] = 'normal';
+        var layer_ocean_1 = new L.geoJson(json_ocean_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_ocean_1',
+            layerName: 'layer_ocean_1',
+            pane: 'pane_ocean_1',
+            onEachFeature: pop_ocean_1,
+            style: style_ocean_1_0,
+        });
+        bounds_group.addLayer(layer_ocean_1);
+        map.addLayer(layer_ocean_1);
+        function pop_CNTR_BN_01M_2020_3035_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EU_FLAG'] !== null ? autolinker.link(feature.properties['EU_FLAG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['EFTA_FLAG'] !== null ? autolinker.link(feature.properties['EFTA_FLAG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CC_FLAG'] !== null ? autolinker.link(feature.properties['CC_FLAG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['CNTR_BN_ID'] !== null ? autolinker.link(feature.properties['CNTR_BN_ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['OTHR_FLAG'] !== null ? autolinker.link(feature.properties['OTHR_FLAG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['COAS_FLAG'] !== null ? autolinker.link(feature.properties['COAS_FLAG'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['POL_STAT'] !== null ? autolinker.link(feature.properties['POL_STAT'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['FID'] !== null ? autolinker.link(feature.properties['FID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_CNTR_BN_01M_2020_3035_2_0() {
+            return {
+                pane: 'pane_CNTR_BN_01M_2020_3035_2',
+                opacity: 1,
+                color: 'rgba(19,11,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_CNTR_BN_01M_2020_3035_2');
+        map.getPane('pane_CNTR_BN_01M_2020_3035_2').style.zIndex = 402;
+        map.getPane('pane_CNTR_BN_01M_2020_3035_2').style['mix-blend-mode'] = 'normal';
+        var layer_CNTR_BN_01M_2020_3035_2 = new L.geoJson(json_CNTR_BN_01M_2020_3035_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_CNTR_BN_01M_2020_3035_2',
+            layerName: 'layer_CNTR_BN_01M_2020_3035_2',
+            pane: 'pane_CNTR_BN_01M_2020_3035_2',
+            onEachFeature: pop_CNTR_BN_01M_2020_3035_2,
+            style: style_CNTR_BN_01M_2020_3035_2_0,
+        });
+        bounds_group.addLayer(layer_CNTR_BN_01M_2020_3035_2);
+        map.addLayer(layer_CNTR_BN_01M_2020_3035_2);
+        function pop_levelsofrestrictions_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">NAME</th>\
+                        <td>' + (feature.properties['NAME'] !== null ? autolinker.link(feature.properties['NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ORGN_NAME'] !== null ? autolinker.link(feature.properties['ORGN_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_levelsofrestrictions_3_0(feature) {
+            switch(String(feature.properties['NAME'])) {
+                case 'Serbia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,245,240,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Slovenia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,242,236,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Bosnia Herzegovina':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,239,232,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Iceland':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,236,228,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Estonia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,233,223,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'San Marino':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,230,219,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Czech Republic':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,227,215,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Belarus':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,224,210,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Andorra':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,203,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Lithuania':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,214,196,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Liechtenstein':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,209,189,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Luxembourg':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,203,182,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Albania':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,198,175,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Romania':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,193,168,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Bulgaria':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,187,161,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Switzerland':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,182,155,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Russia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,176,148,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Finland':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,170,141,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Latvia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,164,135,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Slovakia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,158,128,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Monaco':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,152,121,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Belgium':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,146,114,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'France':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,141,109,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Malta':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,135,103,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Poland':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,129,97,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Spain':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,124,91,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sweden':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,118,86,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Faeroe Islands (Denmark)':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252,112,80,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Denmark':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,106,74,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Portugal':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(250,100,70,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ukraine':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,93,66,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Jan Mayen (Norway)':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,86,61,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Svalbard (Norway)':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,80,57,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Norway':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,73,53,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Austria':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(241,66,48,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Greece':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(240,59,44,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Jersey (UK)':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(235,54,42,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Gibraltar (UK)':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,49,40,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Guernsey (UK)':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,44,37,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'United Kingdom':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(219,39,35,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Isle of Man (UK)':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(214,34,33,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Turkey':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,29,31,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Georgia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(204,24,29,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Hungary':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(198,22,28,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Netherlands':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(192,21,26,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Moldova':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(186,20,25,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Azerbaijan':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(180,18,24,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Italy':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(175,17,23,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Ireland':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(169,15,21,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Germany':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(161,13,20,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Armenia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(149,11,19,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Macedonia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(137,8,17,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Croatia':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(126,5,16,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Montenegro':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(114,2,14,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'NULL':
+                    return {
+                pane: 'pane_levelsofrestrictions_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,0,13,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_levelsofrestrictions_3');
+        map.getPane('pane_levelsofrestrictions_3').style.zIndex = 403;
+        map.getPane('pane_levelsofrestrictions_3').style['mix-blend-mode'] = 'normal';
+        var layer_levelsofrestrictions_3 = new L.geoJson(json_levelsofrestrictions_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_levelsofrestrictions_3',
+            layerName: 'layer_levelsofrestrictions_3',
+            pane: 'pane_levelsofrestrictions_3',
+            onEachFeature: pop_levelsofrestrictions_3,
+            style: style_levelsofrestrictions_3_0,
+        });
+        bounds_group.addLayer(layer_levelsofrestrictions_3);
+        map.addLayer(layer_levelsofrestrictions_3);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        setBounds();
+        var i = 0;
+        layer_levelsofrestrictions_3.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['NAME'] !== null?String('<div style="color: #000000; font-size: 7pt; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['NAME']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_levelsofrestrictions_3'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        map.addControl(new L.Control.Search({
+            layer: layer_levelsofrestrictions_3,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'NAME'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_levelsofrestrictions_3]);
+        map.on("zoomend", function(){
+            resetLabels([layer_levelsofrestrictions_3]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_levelsofrestrictions_3]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_levelsofrestrictions_3]);
+        });
+        </script>
+    </body>
+</html>
